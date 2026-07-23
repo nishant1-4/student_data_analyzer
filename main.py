@@ -1,4 +1,5 @@
 import numpy as np
+import pathlib as pth
 
 rnd = np.random.default_rng(seed=10)
 
@@ -38,7 +39,7 @@ def top_n_students(avg_mark: np.ndarray, top_n: int):
         count += 1
 
 
-def assign_grade(avg_mark, need_grades:bool = False):
+def assign_grade(avg_mark, need_grades: bool = False):
     conditions = [
         (avg_mark >= 90),
         (avg_mark >= 80) & (avg_mark < 90),
@@ -47,18 +48,44 @@ def assign_grade(avg_mark, need_grades:bool = False):
         (avg_mark >= 50) & (avg_mark < 60),
         (avg_mark < 50),
     ]
-    choice = [chr(i) for i in range(65,71)] # ['A','B','C','D','E','F']
+    choice = [chr(i) for i in range(65, 71)]  # ['A','B','C','D','E','F']
     grades_arr = np.select(conditions, choice, default="Invalid")
     return grades_arr
 
+
 def grades_distribution(grades):
-    grade, number_of_grades = np.unique(grades,return_counts=True)
+    grade, number_of_grades = np.unique(grades, return_counts=True)
     print("Number of students in each grade:")
-    for gr, num in zip(grade,number_of_grades):
+    for gr, num in zip(grade, number_of_grades):
         print(f"{gr}: {num}")
 
+
 def failed_students(grades):
-    failed_students = np.where(grades=='F')[0]
+    failed_students = np.where(grades == "F")[0]
     print(f"Total {failed_students.size} has failed!")
     for student in failed_students:
         print(f"Student {student+1}")
+
+
+def save_students_data(file_name, **data):
+    if pth.Path(file_name).is_file():
+        choice = input(
+            f"The file {file_name} already exists, do you want to override? (y/any key to cancel): "
+        )
+        if not choice == "y":
+            print("Operation cancelled!")
+            return
+    np.savez(file_name, **data)
+    print("Data saved successfully")
+
+
+def load_student_data(file_name):
+    try:
+        data = np.load(file_name)
+        print("Data fetched successfully")
+        return data
+    except Exception as e:
+        print(f"File not found\n{e}")
+
+
+save_students_data("student_data.npz", student_marks=student_marks)

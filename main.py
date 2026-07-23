@@ -28,3 +28,11 @@ def details_of_topper(subject_arr, marks_arr, avg_arr, topper_index):
 
     for subject, marks in zip(subject_arr, marks_arr[topper_index]):
         print(f"{subject} -> {marks}")
+
+
+def top_n_students(avg_mark: np.ndarray, top_n: int):
+    top_list = avg_mark.argsort()[-(top_n):][::-1]
+    count = 1
+    for student, avg in zip(top_list, avg_mark[top_list]):
+        print(f"{count}. Student {student+1} -> {avg}")
+        count += 1

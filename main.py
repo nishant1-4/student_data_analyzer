@@ -36,3 +36,29 @@ def top_n_students(avg_mark: np.ndarray, top_n: int):
     for student, avg in zip(top_list, avg_mark[top_list]):
         print(f"{count}. Student {student+1} -> {avg}")
         count += 1
+
+
+def assign_grade(avg_mark, need_grades:bool = False):
+    conditions = [
+        (avg_mark >= 90),
+        (avg_mark >= 80) & (avg_mark < 90),
+        (avg_mark >= 70) & (avg_mark < 80),
+        (avg_mark >= 60) & (avg_mark < 70),
+        (avg_mark >= 50) & (avg_mark < 60),
+        (avg_mark < 50),
+    ]
+    choice = [chr(i) for i in range(65,71)] # ['A','B','C','D','E','F']
+    grades_arr = np.select(conditions, choice, default="Invalid")
+    return grades_arr
+
+def grades_distribution(grades):
+    grade, number_of_grades = np.unique(grades,return_counts=True)
+    print("Number of students in each grade:")
+    for gr, num in zip(grade,number_of_grades):
+        print(f"{gr}: {num}")
+
+def failed_students(grades):
+    failed_students = np.where(grades=='F')[0]
+    print(f"Total {failed_students.size} has failed!")
+    for student in failed_students:
+        print(f"Student {student+1}")

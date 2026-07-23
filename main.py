@@ -8,7 +8,5 @@ no_of_students = 500
 no_of_subjects = 5
 
 student_marks = rnd.integers(min_mark,max_mark+1,size=(no_of_students,no_of_subjects))
-
-print(student_marks.shape)
-print(student_marks.dtype)
-print(student_marks[:5])
+average_marks = student_marks.mean(axis=1)
+subject_average = student_marks.mean(axis=0)
